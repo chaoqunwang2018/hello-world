@@ -1,0 +1,9 @@
+# Extract identity and sample information from seurat object to determine the number of cells per cluster per sample
+library(tidyr)
+n_cells <- FetchData(Clearimmune.combined, 
+                     vars = c("ident", "PdgfraBleo")) %>%
+  group_by(PdgfraBleo) %>%
+  dplyr::count(ident) %>% 
+  spread(ident, n) 
+# View table
+View(n_cells)
