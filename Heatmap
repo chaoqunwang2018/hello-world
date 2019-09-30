@@ -1,0 +1,8 @@
+all.genes <- rownames(Clearimmune.combined)
+Clearimmune.combined <- ScaleData(Clearimmune.combined, features = all.genes)
+
+Clearimmune.combined <- ScaleData(Clearimmune.combined, vars.to.regress = c("nUMI", "percent.mito", "orig.ident"))
+Clearimmune.combined.markers <- FindAllMarkers(Clearimmune.combined, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+Clearimmune.combined.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC)
+top10 <- Clearimmune.combined.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
+DoHeatmap(object = Clearimmune.combined, features = top10$gene)
